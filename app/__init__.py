@@ -1,0 +1,1 @@
+"""OpenBioSignal application package."""

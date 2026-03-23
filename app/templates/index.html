@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+        main {
+            max-width: 760px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        }
+        h1 {
+            margin-top: 0;
+        }
+        textarea {
+            width: 100%;
+            min-height: 140px;
+            padding: 0.75rem;
+            font: inherit;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            margin-top: 1rem;
+            padding: 0.8rem 1.2rem;
+            border: 0;
+            border-radius: 8px;
+            background: #2563eb;
+            color: #ffffff;
+            cursor: pointer;
+            font: inherit;
+        }
+        p.meta {
+            color: #475569;
+        }
+        .status {
+            margin-top: 1rem;
+            color: #0f172a;
+        }
+        a.secondary-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #2563eb;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>OpenBioSignal</h1>
+        <p class="meta">
+            A local-first biomedical evidence intelligence scaffold for research-question intake,
+            literature processing, structured claim extraction, and grounded brief generation.
+        </p>
+
+        <form id="run-form">
+            <label for="question"><strong>Research Question</strong></label>
+            <textarea id="question" name="question" placeholder="Example: What evidence supports omega-3 supplementation for reducing triglycerides in adults?" required></textarea>
+            <button type="submit">Create Mock Run</button>
+        </form>
+
+        <a class="secondary-link" href="/runs">Browse Saved Runs</a>
+
+        <p id="status" class="status"></p>
+    </main>
+
+    <script>
+        const form = document.getElementById("run-form");
+        const status = document.getElementById("status");
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const question = document.getElementById("question").value.trim();
+
+            if (!question) {
+                status.textContent = "Please enter a research question.";
+                return;
+            }
+
+            status.textContent = "Creating mock run...";
+
+            try {
+                const response = await fetch("/api/runs", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ question })
+                });
+
+                if (!response.ok) {
+                    throw new Error("Request failed");
+                }
+
+                const payload = await response.json();
+                const params = new URLSearchParams({
+                    question: payload.question,
+                    status: payload.status
+                });
+                window.location.href = `/runs/${payload.run_id}?${params.toString()}`;
+            } catch (error) {
+                status.textContent = "Unable to create a run right now.";
+            }
+        });
+    </script>
+</body>
+</html>

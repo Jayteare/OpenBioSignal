@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background: #f8fafc;
+            color: #0f172a;
+        }
+        main {
+            max-width: 980px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        a.button {
+            display: inline-block;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            background: #2563eb;
+            color: #ffffff;
+            text-decoration: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+        th, td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background: #f8fafc;
+        }
+        .question {
+            max-width: 420px;
+            white-space: pre-wrap;
+        }
+        .open-link {
+            color: #2563eb;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="header">
+            <div>
+                <h1>Research Runs</h1>
+                <p>Browse saved local-first biomedical evidence runs.</p>
+            </div>
+            <a class="button" href="/">Start New Run</a>
+        </div>
+
+        {% if runs %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Run ID</th>
+                    <th>Question</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th>Docs</th>
+                    <th>Chunks</th>
+                    <th>Claims</th>
+                    <th>Brief</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for run in runs %}
+                <tr>
+                    <td><code>{{ run.id }}</code></td>
+                    <td class="question">{{ run.question }}</td>
+                    <td>{{ run.status }}</td>
+                    <td>{{ run.created_at }}</td>
+                    <td>{{ run.documents_count }}</td>
+                    <td>{{ run.chunks_count }}</td>
+                    <td>{{ run.claims_count }}</td>
+                    <td>{% if run.has_brief %}Yes{% else %}No{% endif %}</td>
+                    <td><a class="open-link" href="/runs/{{ run.id }}">Open</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No runs saved yet.</p>
+        {% endif %}
+    </main>
+</body>
+</html>

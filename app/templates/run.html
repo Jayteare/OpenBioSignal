@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }}</title>
+    <style>
+        :root {
+            color-scheme: light;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 2rem 1.25rem 3rem;
+            font-family: Arial, sans-serif;
+            line-height: 1.55;
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+        main {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        a {
+            color: #2563eb;
+        }
+        h1, h2, h3 {
+            margin: 0;
+            line-height: 1.2;
+        }
+        p, ul {
+            margin: 0;
+        }
+        section,
+        details.workspace-section {
+            margin-top: 1.5rem;
+        }
+        .surface {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
+            padding: 1.4rem;
+        }
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .section-head p {
+            color: #475569;
+            margin-top: 0.35rem;
+        }
+        .hero {
+            padding: 1.6rem;
+        }
+        .hero-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        .hero-title {
+            max-width: 760px;
+        }
+        .eyebrow {
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+        .hero-title h1 {
+            font-size: clamp(1.6rem, 2.3vw, 2.3rem);
+            margin-bottom: 0.8rem;
+        }
+        .hero-meta {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            color: #475569;
+            font-size: 0.95rem;
+        }
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+        button {
+            border: 0;
+            border-radius: 10px;
+            padding: 0.78rem 1.1rem;
+            cursor: pointer;
+            font: inherit;
+            transition: opacity 0.15s ease, transform 0.15s ease;
+        }
+        button:hover:not([disabled]) {
+            transform: translateY(-1px);
+        }
+        button[disabled] {
+            opacity: 0.7;
+            cursor: wait;
+        }
+        .primary-button {
+            background: #2563eb;
+            color: #ffffff;
+            font-weight: bold;
+        }
+        .secondary-button {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+        .ghost-button {
+            background: #ffffff;
+            color: #0f172a;
+            border: 1px solid #cbd5e1;
+        }
+        .status-line {
+            margin-top: 1rem;
+            min-height: 1.4rem;
+            color: #475569;
+            font-size: 0.95rem;
+        }
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.85rem;
+            margin-top: 1.25rem;
+        }
+        .metric-card {
+            padding: 1rem;
+            border-radius: 14px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+        .metric-label {
+            font-size: 0.83rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+            margin-bottom: 0.35rem;
+        }
+        .metric-value {
+            font-size: 1.45rem;
+            font-weight: bold;
+            color: #0f172a;
+        }
+        .metric-subvalue {
+            margin-top: 0.2rem;
+            color: #475569;
+            font-size: 0.92rem;
+        }
+        .badge-row {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .status-badge,
+        .stance-badge,
+        .verdict-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.26rem 0.62rem;
+            border-radius: 999px;
+            font-size: 0.84rem;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .status-badge {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+        .stance-supports {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .stance-weakens {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .stance-mixed {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .stance-background {
+            background: #e2e8f0;
+            color: #334155;
+        }
+        .verdict-strong {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .verdict-acceptable {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+        .verdict-weak {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .workspace-section summary {
+            cursor: pointer;
+            font-weight: bold;
+            list-style: none;
+        }
+        .workspace-section summary::-webkit-details-marker {
+            display: none;
+        }
+        .workspace-section summary::after {
+            content: "+";
+            float: right;
+            color: #64748b;
+        }
+        .workspace-section[open] summary::after {
+            content: "-";
+        }
+        .workspace-nav {
+            position: sticky;
+            top: 0.75rem;
+            z-index: 20;
+            margin-top: 1rem;
+            padding: 0.9rem 1rem;
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        }
+        .workspace-nav a {
+            text-decoration: none;
+            padding: 0.42rem 0.72rem;
+            border-radius: 999px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            color: #334155;
+            font-size: 0.92rem;
+        }
+        .workspace-nav a:hover {
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+        .workspace-section > div,
+        .workspace-section > pre {
+            margin-top: 1rem;
+        }
+        .advanced-actions {
+            margin-top: 1rem;
+        }
+        .advanced-actions .actions-grid {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .brief-layout {
+            display: grid;
+            gap: 1rem;
+        }
+        .brief-answer {
+            padding: 1rem;
+            border-radius: 14px;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+        }
+        .brief-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+        .brief-list-card {
+            padding: 1rem;
+            border-radius: 14px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+        .brief-list-card ul {
+            padding-left: 1.2rem;
+            margin-top: 0.6rem;
+        }
+        .stack-list {
+            display: grid;
+            gap: 1rem;
+        }
+        .claim-card,
+        .evidence-card,
+        .chunk-card,
+        .paper-card,
+        .debug-card {
+            padding: 1rem;
+            border-radius: 14px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin-bottom: 0.8rem;
+        }
+        .card-meta {
+            display: flex;
+            gap: 0.55rem;
+            flex-wrap: wrap;
+            align-items: center;
+            color: #475569;
+            font-size: 0.92rem;
+        }
+        .label-row {
+            display: grid;
+            gap: 0.8rem;
+            margin-top: 0.9rem;
+        }
+        .section-tail {
+            margin-top: 1rem;
+            text-align: right;
+        }
+        .section-tail a {
+            font-size: 0.92rem;
+            color: #475569;
+            text-decoration: none;
+        }
+        .section-tail a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+        .label-block strong {
+            display: block;
+            margin-bottom: 0.25rem;
+            color: #334155;
+            font-size: 0.9rem;
+        }
+        .wrap-text {
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .subtle-text {
+            color: #475569;
+            font-size: 0.92rem;
+        }
+        .score {
+            font-family: Consolas, monospace;
+            color: #0f172a;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.8rem;
+            margin-top: 0.85rem;
+        }
+        .info-pill {
+            padding: 0.85rem;
+            border-radius: 12px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+        }
+        .info-pill strong {
+            display: block;
+            margin-bottom: 0.2rem;
+            font-size: 0.88rem;
+            color: #475569;
+        }
+        .warning-list {
+            margin-top: 0.85rem;
+            padding-left: 1.2rem;
+            color: #9a3412;
+        }
+        .diagnostic-alert {
+            margin-top: 1rem;
+            padding: 0.9rem 1rem;
+            border-radius: 14px;
+            background: #fff7ed;
+            border: 1px solid #fdba74;
+            color: #9a3412;
+        }
+        .debug-inline-list {
+            color: #475569;
+            word-break: break-word;
+        }
+        .report-block {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 14px;
+            padding: 1rem;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            line-height: 1.55;
+        }
+        @media (max-width: 760px) {
+            body {
+                padding: 1rem 0.75rem 2rem;
+            }
+            .workspace-nav {
+                position: static;
+            }
+            .hero-top,
+            .section-head,
+            .card-top {
+                flex-direction: column;
+            }
+            .hero-actions {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main id="top">
+        <section class="surface hero">
+            <div class="hero-top">
+                <div class="hero-title">
+                    <p class="eyebrow">Research Workspace</p>
+                    <div class="badge-row">
+                        <span class="status-badge">{{ status }}</span>
+                    </div>
+                    <h1>{{ question }}</h1>
+                    <div class="hero-meta">
+                        <span><strong>Run:</strong> {{ run_id }}</span>
+                        <span><strong>Docs:</strong> {{ documents_count }}</span>
+                        <span><strong>Chunks:</strong> {{ chunks_count }}</span>
+                        <span><strong>Claims:</strong> {{ claims_count }}</span>
+                    </div>
+                </div>
+                <div class="hero-actions">
+                    <button id="pipeline-button" class="primary-button" type="button">Run Pipeline</button>
+                </div>
+            </div>
+
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <p class="metric-label">Documents</p>
+                    <p class="metric-value">{{ documents_count }}</p>
+                    <p class="metric-subvalue">{{ abstracts_count }} with abstracts</p>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Chunks</p>
+                    <p class="metric-value">{{ chunks_count }}</p>
+                    <p class="metric-subvalue">{{ ranked_chunks_count }} ranked</p>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Claims</p>
+                    <p class="metric-value">{{ claims_count }}</p>
+                    <p class="metric-subvalue">{{ evaluation_summary.claims_evaluated }} evaluated</p>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Avg Eval</p>
+                    <p class="metric-value">
+                        {{ evaluation_summary.average_overall_score if evaluation_summary.average_overall_score is not none else "N/A" }}
+                    </p>
+                    <p class="metric-subvalue">Overall quality</p>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Brief Status</p>
+                    <p class="metric-value">{% if brief %}Ready{% else %}Pending{% endif %}</p>
+                    <p class="metric-subvalue">{% if brief and brief.markdown_report %}Report available{% else %}No report yet{% endif %}</p>
+                </div>
+            </div>
+
+            <details class="workspace-section advanced-actions">
+                <summary>Pipeline Tools</summary>
+                <div class="actions-grid">
+                    <button id="search-button" class="secondary-button" type="button">Search PubMed</button>
+                    <button id="abstract-button" class="secondary-button" type="button">Fetch Abstracts</button>
+                    <button id="chunk-button" class="secondary-button" type="button">Chunk Abstracts</button>
+                    <button id="rank-button" class="secondary-button" type="button">Rank Chunks</button>
+                    <button id="claims-button" class="secondary-button" type="button">Extract Claims</button>
+                    <button id="evaluate-button" class="secondary-button" type="button">Evaluate Claims</button>
+                    <button id="brief-button" class="secondary-button" type="button">Generate Brief</button>
+                </div>
+            </details>
+
+            <p id="search-status" class="status-line"></p>
+        </section>
+
+        <nav class="workspace-nav" aria-label="Run sections">
+            <a href="#brief-section">Brief</a>
+            <a href="#claims-section">Claims</a>
+            <a href="#evidence-section">Evidence</a>
+            <a href="#chunks-section">Top Chunks</a>
+            <a href="#papers-section">Source Papers</a>
+            <a href="#diagnostics-section">Diagnostics</a>
+            <a href="#debug-section">Debug</a>
+            <a href="#report-section">Report</a>
+        </nav>
+
+        <section id="brief-section" class="surface">
+            <div class="section-head">
+                <div>
+                    <h2>Brief</h2>
+                    <p>The current evidence-bounded answer for this run.</p>
+                </div>
+            </div>
+            {% if brief %}
+            <div class="brief-layout">
+                <div class="brief-answer">
+                    <div class="label-block">
+                        <strong>Direct Answer</strong>
+                        <p class="wrap-text">{{ brief.direct_answer }}</p>
+                    </div>
+                    <div class="label-block" style="margin-top: 1rem;">
+                        <strong>Summary</strong>
+                        <p class="wrap-text">{{ brief.summary }}</p>
+                    </div>
+                </div>
+                <div class="brief-grid">
+                    <div class="brief-list-card">
+                        <strong>Supporting Findings</strong>
+                        {% if brief.supporting_findings %}
+                        <ul>
+                            {% for item in brief.supporting_findings %}
+                            <li>{{ item }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p class="subtle-text" style="margin-top: 0.6rem;">None recorded.</p>
+                        {% endif %}
+                    </div>
+                    <div class="brief-list-card">
+                        <strong>Conflicting Findings</strong>
+                        {% if brief.conflicting_findings %}
+                        <ul>
+                            {% for item in brief.conflicting_findings %}
+                            <li>{{ item }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p class="subtle-text" style="margin-top: 0.6rem;">None recorded.</p>
+                        {% endif %}
+                    </div>
+                    <div class="brief-list-card">
+                        <strong>Caveats</strong>
+                        {% if brief.caveats %}
+                        <ul>
+                            {% for item in brief.caveats %}
+                            <li>{{ item }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p class="subtle-text" style="margin-top: 0.6rem;">None recorded.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <p class="subtle-text">No generated brief yet. Run the pipeline or generate a brief after claims are available.</p>
+            {% endif %}
+            <p class="section-tail"><a href="#top">Back to top</a></p>
+        </section>
+
+        <section id="claims-section" class="surface">
+            <div class="section-head">
+                <div>
+                    <h2>Claim Review</h2>
+                    <p>Readable claim cards with stance, evidence, rationale, and quality signals.</p>
+                </div>
+            </div>
+            {% if claims %}
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <p class="metric-label">Total Claims</p>
+                    <p class="metric-value">{{ claims_count }}</p>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Supports</p>
+                    <p class="metric-value">{{ diagnostics.claims_by_stance.get("supports", 0) }}</p>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Weakens</p>
+                    <p class="metric-value">{{ diagnostics.claims_by_stance.get("weakens", 0) }}</p>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Mixed</p>
+                    <p class="metric-value">{{ diagnostics.claims_by_stance.get("mixed", 0) }}</p>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Background</p>
+                    <p class="metric-value">{{ diagnostics.claims_by_stance.get("background", 0) }}</p>
+                </div>
+            </div>
+
+            <div class="metric-grid" style="margin-top: 0.85rem;">
+                <div class="metric-card">
+                    <p class="metric-label">Claims Evaluated</p>
+                    <p class="metric-value">{{ evaluation_summary.claims_evaluated }}</p>
+                    <p class="metric-subvalue">of {{ evaluation_summary.claims_total }}</p>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Avg Overall</p>
+                    <p class="metric-value">{{ evaluation_summary.average_overall_score if evaluation_summary.average_overall_score is not none else "N/A" }}</p>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Avg Faithfulness</p>
+                    <p class="metric-value">{{ evaluation_summary.average_faithfulness_score if evaluation_summary.average_faithfulness_score is not none else "N/A" }}</p>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Avg Stance Fit</p>
+                    <p class="metric-value">{{ evaluation_summary.average_stance_fit_score if evaluation_summary.average_stance_fit_score is not none else "N/A" }}</p>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Verdicts</p>
+                    <p class="metric-value">{{ evaluation_summary.verdict_counts.get("weak", 0) }}</p>
+                    <p class="metric-subvalue">weak | {{ evaluation_summary.verdict_counts.get("acceptable", 0) }} acceptable | {{ evaluation_summary.verdict_counts.get("strong", 0) }} strong</p>
+                </div>
+            </div>
+
+            <div class="stack-list" style="margin-top: 1rem;">
+                {% for claim in claims %}
+                {% set stance_value = claim.stance or "background" %}
+                {% set verdict_value = claim.evaluation_verdict or "acceptable" %}
+                <article class="claim-card">
+                    <div class="card-top">
+                        <div>
+                            <strong>{{ document_titles_by_id.get(claim.document_id, "Untitled document") }}</strong>
+                            <p class="subtle-text">
+                                PMID {{ document_pmids_by_id.get(claim.document_id) or "N/A" }}
+                                {% if claim.study_type %} | {{ claim.study_type }}{% endif %}
+                                {% if claim.outcome %} | Outcome: {{ claim.outcome }}{% endif %}
+                            </p>
+                        </div>
+                        <div class="card-meta">
+                            <span class="stance-badge stance-{{ stance_value }}">{{ stance_value }}</span>
+                            {% if claim.evaluation_overall_score is not none %}
+                            <span class="verdict-badge verdict-{{ verdict_value }}">{{ verdict_value }}</span>
+                            {% endif %}
+                            <span>relevance {{ claim.relevance or "low" }}</span>
+                            <span class="score">score {{ "%.4f"|format(retrieval_scores_by_chunk_id.get(claim.chunk_id, 0) or 0) }}</span>
+                        </div>
+                    </div>
+                    <div class="label-row">
+                        <div class="label-block">
+                            <strong>Claim</strong>
+                            <p class="wrap-text">{{ claim.claim_text }}</p>
+                        </div>
+                        <div class="label-block">
+                            <strong>Evidence Span</strong>
+                            <p class="wrap-text">{{ claim.evidence_span or "N/A" }}</p>
+                        </div>
+                        <div class="label-block">
+                            <strong>Rationale</strong>
+                            <p class="wrap-text">{{ claim.rationale or "N/A" }}</p>
+                        </div>
+                    </div>
+                    <details class="workspace-section">
+                        <summary>More detail</summary>
+                        <div class="info-grid">
+                            <div class="info-pill">
+                                <strong>Uncertainty</strong>
+                                <span class="wrap-text">{{ claim.uncertainty_note or "N/A" }}</span>
+                            </div>
+                            <div class="info-pill">
+                                <strong>Stance Source</strong>
+                                <span class="wrap-text">{{ claim.stance_adjustment_note or "model" }}</span>
+                            </div>
+                            <div class="info-pill">
+                                <strong>Faithfulness Note</strong>
+                                <span class="wrap-text">{{ claim.claim_repair_note or "N/A" }}</span>
+                            </div>
+                            <div class="info-pill">
+                                <strong>Evaluation</strong>
+                                <span class="wrap-text">
+                                    overall {{ claim.evaluation_overall_score if claim.evaluation_overall_score is not none else "N/A" }}
+                                    | faithfulness {{ claim.evaluation_faithfulness_score if claim.evaluation_faithfulness_score is not none else "N/A" }}
+                                </span>
+                            </div>
+                        </div>
+                        {% if claim.evaluation_strengths or claim.evaluation_weaknesses %}
+                        <div class="label-row" style="margin-top: 1rem;">
+                            <div class="label-block">
+                                <strong>Strengths</strong>
+                                {% if claim.evaluation_strengths %}
+                                    {% for item in claim.evaluation_strengths %}
+                                    <p class="wrap-text">{{ item }}</p>
+                                    {% endfor %}
+                                {% else %}
+                                <p class="wrap-text">N/A</p>
+                                {% endif %}
+                            </div>
+                            <div class="label-block">
+                                <strong>Weaknesses</strong>
+                                {% if claim.evaluation_weaknesses %}
+                                    {% for item in claim.evaluation_weaknesses %}
+                                    <p class="wrap-text">{{ item }}</p>
+                                    {% endfor %}
+                                {% else %}
+                                <p class="wrap-text">N/A</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </details>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="subtle-text">No extracted claims yet.</p>
+            {% endif %}
+            <p class="section-tail"><a href="#top">Back to top</a></p>
+        </section>
+
+        <section id="evidence-section" class="surface">
+            <div class="section-head">
+                <div>
+                    <h2>Evidence</h2>
+                    <p>Compact evidence entries for inspecting what is feeding the brief.</p>
+                </div>
+            </div>
+            {% if brief and brief.evidence_table_rows %}
+            <div class="stack-list">
+                {% for row in brief.evidence_table_rows %}
+                {% set stance_value = row.stance or "background" %}
+                <article class="evidence-card">
+                    <div class="card-top">
+                        <div>
+                            <strong>{{ row.document_title or "Untitled document" }}</strong>
+                            <p class="subtle-text">
+                                PMID {{ row.pmid or "N/A" }}
+                                {% if row.study_type %} | {{ row.study_type }}{% endif %}
+                                {% if row.outcome %} | Outcome: {{ row.outcome }}{% endif %}
+                            </p>
+                        </div>
+                        <div class="card-meta">
+                            <span class="stance-badge stance-{{ stance_value }}">{{ stance_value }}</span>
+                            <span>{{ row.relevance or "low" }}</span>
+                            <span class="score">{{ "%.4f"|format(row.retrieval_score or 0) }}</span>
+                        </div>
+                    </div>
+                    <div class="label-row">
+                        <div class="label-block">
+                            <strong>Claim</strong>
+                            <p class="wrap-text">{{ row.claim_text }}</p>
+                        </div>
+                        <div class="label-block">
+                            <strong>Evidence Span</strong>
+                            <p class="wrap-text">{{ row.evidence_span or "N/A" }}</p>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="subtle-text">No evidence table available yet.</p>
+            {% endif %}
+            <p class="section-tail"><a href="#top">Back to top</a></p>
+        </section>
+
+        <section id="chunks-section" class="surface">
+            <div class="section-head">
+                <div>
+                    <h2>Top Chunks</h2>
+                    <p>Ranked chunk cards with a lightweight score breakdown.</p>
+                </div>
+            </div>
+            {% if top_chunks and ranked_chunks_count %}
+            <div class="stack-list">
+                {% for chunk in top_chunks %}
+                {% set breakdown = top_chunk_rank_breakdowns.get(chunk.id, {}) %}
+                <article class="chunk-card">
+                    <div class="card-top">
+                        <div>
+                            <strong>{{ document_titles_by_id.get(chunk.document_id, "Untitled document") }}</strong>
+                            <p class="subtle-text">chunk {{ chunk.chunk_index }} | {{ chunk.section }}</p>
+                        </div>
+                        <div class="card-meta">
+                            <span class="score">final {{ "%.4f"|format(chunk.retrieval_score or 0) }}</span>
+                        </div>
+                    </div>
+                    {% if breakdown %}
+                    <div class="info-grid">
+                        <div class="info-pill">
+                            <strong>Lexical</strong>
+                            <span class="score">{{ "%.4f"|format(breakdown.get("lexical_score", 0) or 0) }}</span>
+                        </div>
+                        <div class="info-pill">
+                            <strong>Result Boost</strong>
+                            <span class="score">{{ "%.4f"|format(breakdown.get("result_signal_score", 0) or 0) }}</span>
+                        </div>
+                        <div class="info-pill">
+                            <strong>Methods Penalty</strong>
+                            <span class="score">{{ "%.4f"|format(breakdown.get("methods_penalty", 0) or 0) }}</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="label-row" style="margin-top: 0.9rem;">
+                        <div class="label-block">
+                            <strong>Chunk Text</strong>
+                            <p class="wrap-text">{{ chunk.text }}</p>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="subtle-text">No ranked chunks yet.</p>
+            {% endif %}
+            <p class="section-tail"><a href="#top">Back to top</a></p>
+        </section>
+
+        <details id="papers-section" class="workspace-section surface">
+            <summary>Source Papers</summary>
+            {% if documents %}
+            <div class="stack-list">
+                {% for document in documents %}
+                <article class="paper-card">
+                    <div class="card-top">
+                        <div>
+                            <strong>
+                                {% if document.source_url %}
+                                <a href="{{ document.source_url }}" target="_blank" rel="noreferrer">{{ document.title }}</a>
+                                {% else %}
+                                {{ document.title }}
+                                {% endif %}
+                            </strong>
+                            <p class="subtle-text">
+                                PMID {{ document.pmid or "N/A" }} | {{ document.journal or "N/A" }} | {{ document.pubdate or "N/A" }}
+                            </p>
+                        </div>
+                        <div class="card-meta">
+                            <span>{{ document.authors or "Authors unavailable" }}</span>
+                            <span>{{ chunk_counts_by_document.get(document.id, 0) }} chunks</span>
+                        </div>
+                    </div>
+                    {% if document.abstract %}
+                    <div class="label-block">
+                        <strong>Abstract Preview</strong>
+                        <p class="wrap-text">{{ document.abstract[:420] }}{% if document.abstract|length > 420 %}...{% endif %}</p>
+                    </div>
+                    {% else %}
+                    <p class="subtle-text">No abstract stored yet.</p>
+                    {% endif %}
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="subtle-text">No candidate papers stored yet.</p>
+            {% endif %}
+        </details>
+
+        <details id="diagnostics-section" class="workspace-section surface">
+            <summary>Diagnostics</summary>
+            <div class="info-grid">
+                <div class="info-pill">
+                    <strong>Documents</strong>
+                    <span>{{ diagnostics.documents_total }} total, {{ diagnostics.documents_with_abstracts }} with abstracts</span>
+                </div>
+                <div class="info-pill">
+                    <strong>Chunks</strong>
+                    <span>{{ diagnostics.chunks_total }} total, {{ diagnostics.ranked_chunks_total }} ranked</span>
+                </div>
+                <div class="info-pill">
+                    <strong>Claims</strong>
+                    <span>{{ diagnostics.claims_total }} total, {{ diagnostics.claimed_chunks_total }} claimed chunks</span>
+                </div>
+                <div class="info-pill">
+                    <strong>Brief</strong>
+                    <span>{% if diagnostics.brief_exists %}generated{% else %}not generated{% endif %}</span>
+                </div>
+                <div class="info-pill">
+                    <strong>Average Claimed Score</strong>
+                    <span>{{ "%.4f"|format(diagnostics.average_retrieval_score_for_claimed_chunks or 0) if diagnostics.average_retrieval_score_for_claimed_chunks is not none else "N/A" }}</span>
+                </div>
+                <div class="info-pill">
+                    <strong>Evaluation</strong>
+                    <span>avg overall {{ evaluation_summary.average_overall_score if evaluation_summary.average_overall_score is not none else "N/A" }}</span>
+                </div>
+            </div>
+            {% if diagnostics.latest_pipeline_blocker %}
+            <p class="diagnostic-alert"><strong>Current Blocker:</strong> {{ diagnostics.latest_pipeline_blocker }}</p>
+            {% endif %}
+            {% if diagnostics.warnings %}
+            <ul class="warning-list">
+                {% for warning in diagnostics.warnings %}
+                <li>{{ warning }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </details>
+
+        <details id="debug-section" class="workspace-section surface">
+            <summary>Latest Pipeline Debug</summary>
+            {% if pipeline_debug.has_pipeline_debug %}
+            <div class="stack-list">
+                <article class="debug-card">
+                    <div class="info-grid">
+                        <div class="info-pill">
+                            <strong>Last Pipeline Run</strong>
+                            <span>{{ pipeline_debug.last_pipeline_run_at or "N/A" }}</span>
+                        </div>
+                        <div class="info-pill">
+                            <strong>Error Count</strong>
+                            <span>{{ pipeline_debug.error_count }}</span>
+                        </div>
+                        <div class="info-pill">
+                            <strong>Claim Extraction Attempted</strong>
+                            <span>{% if pipeline_debug.claim_extraction_attempted %}Yes{% else %}No{% endif %}</span>
+                        </div>
+                        <div class="info-pill">
+                            <strong>Claim Extraction Failed</strong>
+                            <span>{% if pipeline_debug.claim_extraction_failed %}Yes{% else %}No{% endif %}</span>
+                        </div>
+                    </div>
+                </article>
+
+                {% for step_name, step_data in pipeline_debug.steps.items() %}
+                <article class="debug-card">
+                    <strong>{{ step_name.replace("_", " ").title() }}</strong>
+                    <div class="info-grid" style="margin-top: 0.8rem;">
+                        {% for key, value in step_data.items() %}
+                        {% if key not in ["raw_error", "failure_details"] %}
+                        <div class="info-pill">
+                            <strong>{{ key.replace("_", " ").title() }}</strong>
+                            <span class="wrap-text">{{ value }}</span>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% if step_data.get("raw_error") %}
+                    <details class="workspace-section">
+                        <summary>Raw error</summary>
+                        <p class="debug-inline-list">{{ step_data.get("raw_error") }}</p>
+                    </details>
+                    {% endif %}
+                    {% if step_data.get("failure_details") %}
+                    <details class="workspace-section">
+                        <summary>Failure details</summary>
+                        <div class="stack-list">
+                            {% for failure in step_data.get("failure_details", []) %}
+                            <article class="debug-card">
+                                <p class="wrap-text">
+                                    chunk {{ failure.get("chunk_id", "N/A") }}
+                                    {% if failure.get("document_title") %}| {{ failure.get("document_title") }}{% endif %}
+                                    | {{ failure.get("error", "Unknown error") }}
+                                </p>
+                                {% if failure.get("raw_error") %}
+                                <details class="workspace-section">
+                                    <summary>Raw error</summary>
+                                    <p class="debug-inline-list">{{ failure.get("raw_error") }}</p>
+                                </details>
+                                {% endif %}
+                            </article>
+                            {% endfor %}
+                        </div>
+                    </details>
+                    {% endif %}
+                </article>
+                {% endfor %}
+
+                <article class="debug-card">
+                    <strong>Non-Fatal Errors</strong>
+                    {% if pipeline_debug.errors %}
+                    <ul class="warning-list">
+                        {% for error in pipeline_debug.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="subtle-text" style="margin-top: 0.7rem;">No non-fatal errors recorded.</p>
+                    {% endif %}
+                </article>
+            </div>
+            {% else %}
+            <p class="subtle-text">No stored pipeline debug snapshot yet.</p>
+            {% endif %}
+        </details>
+
+        <details id="report-section" class="workspace-section surface">
+            <summary>Markdown Report</summary>
+            {% if brief and brief.markdown_report %}
+            <div>
+                {% if brief and brief.markdown_report %}
+                <button id="copy-report-button" class="ghost-button" type="button" style="margin-bottom: 1rem;">Copy Markdown Report</button>
+                {% endif %}
+                <pre id="markdown-report" class="report-block">{{ brief.markdown_report }}</pre>
+            </div>
+            {% else %}
+            <p class="subtle-text">No markdown report available yet.</p>
+            {% endif %}
+        </details>
+
+        <p style="margin-top: 1.5rem;"><a href="/">Start another question</a></p>
+    </main>
+
+    <script>
+        const pipelineButton = document.getElementById("pipeline-button");
+        const searchButton = document.getElementById("search-button");
+        const abstractButton = document.getElementById("abstract-button");
+        const chunkButton = document.getElementById("chunk-button");
+        const rankButton = document.getElementById("rank-button");
+        const claimsButton = document.getElementById("claims-button");
+        const evaluateButton = document.getElementById("evaluate-button");
+        const briefButton = document.getElementById("brief-button");
+        const copyReportButton = document.getElementById("copy-report-button");
+        const searchStatus = document.getElementById("search-status");
+
+        const actionButtons = [
+            pipelineButton,
+            searchButton,
+            abstractButton,
+            chunkButton,
+            rankButton,
+            claimsButton,
+            evaluateButton,
+            briefButton
+        ].filter(Boolean);
+
+        const setButtonsDisabled = (disabled) => {
+            actionButtons.forEach((button) => {
+                button.disabled = disabled;
+            });
+        };
+
+        pipelineButton.addEventListener("click", async () => {
+            setButtonsDisabled(true);
+            searchStatus.textContent = "Running pipeline...";
+
+            try {
+                const response = await fetch("/api/runs/{{ run_id }}/run-pipeline", { method: "POST" });
+                if (!response.ok) {
+                    throw new Error("Pipeline request failed");
+                }
+                window.location.reload();
+            } catch (error) {
+                searchStatus.textContent = "Unable to run the pipeline right now.";
+                setButtonsDisabled(false);
+            }
+        });
+
+        searchButton.addEventListener("click", async () => {
+            setButtonsDisabled(true);
+            searchStatus.textContent = "Searching PubMed...";
+
+            try {
+                const response = await fetch("/api/runs/{{ run_id }}/search", { method: "POST" });
+                if (!response.ok) {
+                    throw new Error("Search request failed");
+                }
+                window.location.reload();
+            } catch (error) {
+                searchStatus.textContent = "Unable to complete PubMed search right now.";
+                setButtonsDisabled(false);
+            }
+        });
+
+        abstractButton.addEventListener("click", async () => {
+            setButtonsDisabled(true);
+            searchStatus.textContent = "Fetching abstracts...";
+
+            try {
+                const response = await fetch("/api/runs/{{ run_id }}/fetch-abstracts", { method: "POST" });
+                if (!response.ok) {
+                    throw new Error("Abstract fetch request failed");
+                }
+                window.location.reload();
+            } catch (error) {
+                searchStatus.textContent = "Unable to fetch abstracts right now.";
+                setButtonsDisabled(false);
+            }
+        });
+
+        chunkButton.addEventListener("click", async () => {
+            setButtonsDisabled(true);
+            searchStatus.textContent = "Chunking abstracts...";
+
+            try {
+                const response = await fetch("/api/runs/{{ run_id }}/chunk-abstracts", { method: "POST" });
+                if (!response.ok) {
+                    throw new Error("Chunking request failed");
+                }
+                window.location.reload();
+            } catch (error) {
+                searchStatus.textContent = "Unable to chunk abstracts right now.";
+                setButtonsDisabled(false);
+            }
+        });
+
+        rankButton.addEventListener("click", async () => {
+            setButtonsDisabled(true);
+            searchStatus.textContent = "Ranking chunks...";
+
+            try {
+                const response = await fetch("/api/runs/{{ run_id }}/rank-chunks", { method: "POST" });
+                if (!response.ok) {
+                    throw new Error("Ranking request failed");
+                }
+                window.location.reload();
+            } catch (error) {
+                searchStatus.textContent = "Unable to rank chunks right now.";
+                setButtonsDisabled(false);
+            }
+        });
+
+        claimsButton.addEventListener("click", async () => {
+            setButtonsDisabled(true);
+            searchStatus.textContent = "Extracting claims...";
+
+            try {
+                const response = await fetch("/api/runs/{{ run_id }}/extract-claims", { method: "POST" });
+                if (!response.ok) {
+                    throw new Error("Claim extraction request failed");
+                }
+                window.location.reload();
+            } catch (error) {
+                searchStatus.textContent = "Unable to extract claims right now.";
+                setButtonsDisabled(false);
+            }
+        });
+
+        evaluateButton.addEventListener("click", async () => {
+            setButtonsDisabled(true);
+            searchStatus.textContent = "Evaluating claims...";
+
+            try {
+                const response = await fetch("/api/runs/{{ run_id }}/evaluate-claims", { method: "POST" });
+                if (!response.ok) {
+                    throw new Error("Claim evaluation request failed");
+                }
+                window.location.reload();
+            } catch (error) {
+                searchStatus.textContent = "Unable to evaluate claims right now.";
+                setButtonsDisabled(false);
+            }
+        });
+
+        briefButton.addEventListener("click", async () => {
+            setButtonsDisabled(true);
+            searchStatus.textContent = "Generating brief...";
+
+            try {
+                const response = await fetch("/api/runs/{{ run_id }}/generate-brief", { method: "POST" });
+                if (!response.ok) {
+                    throw new Error("Brief generation request failed");
+                }
+                window.location.reload();
+            } catch (error) {
+                searchStatus.textContent = "Unable to generate the brief right now.";
+                setButtonsDisabled(false);
+            }
+        });
+
+        if (copyReportButton) {
+            copyReportButton.addEventListener("click", async () => {
+                const reportElement = document.getElementById("markdown-report");
+                if (!reportElement) {
+                    return;
+                }
+
+                try {
+                    await navigator.clipboard.writeText(reportElement.textContent || "");
+                    searchStatus.textContent = "Markdown report copied.";
+                } catch (error) {
+                    searchStatus.textContent = "Unable to copy the markdown report.";
+                }
+            });
+        }
+    </script>
+</body>
+</html>
