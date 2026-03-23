@@ -1,19 +1,25 @@
 # OpenBioSignal
 
-Local-first biomedical evidence intelligence for turning a research question into a grounded evidence brief.
+Open-source biomedical evidence intelligence workspace for PubMed search, claim extraction, evaluation, and grounded research briefs.
 
-## Why This Exists
+OpenBioSignal is a local-first research prototype for exploring biomedical literature with an evidence-aware pipeline. It searches PubMed, fetches abstracts, ranks evidence chunks, extracts structured claims, evaluates claim quality, and generates grounded evidence briefs with traceable support.
 
-Literature review workflows are often fragmented across search tools, PDFs, notes, spreadsheets, and ad hoc summaries. OpenBioSignal is an attempt to make that process more inspectable and more reproducible in a single local workspace:
+> This project is a research prototype for biomedical literature exploration. It is not medical advice, not a clinical decision tool, and should not be used as a substitute for professional judgment.
 
-- start from a research question
-- retrieve relevant PubMed records
-- extract structured claims from ranked passages
-- evaluate claim quality
-- synthesize a brief with provenance
+## Why this exists
 
-The project is intentionally local-first and lightweight so it can be inspected, modified, and run without cloud infrastructure.
+Biomedical literature is noisy, heterogeneous, and difficult to synthesize quickly. Basic search and generic chat interfaces are often not enough when the goal is to inspect evidence, compare findings, and keep track of uncertainty.
 
+OpenBioSignal explores a more evidence-aware workflow:
+
+- search PubMed for relevant papers
+- fetch and chunk abstracts locally
+- rank evidence chunks against a research question
+- extract one structured claim per top chunk
+- evaluate claim quality automatically
+- generate a grounded brief, evidence table, and markdown report
+
+The goal is not to automate scientific truth. The goal is to build a more inspectable and useful workflow for navigating biomedical evidence.
 ## What It Does
 
 Current pipeline:
@@ -36,11 +42,25 @@ Key characteristics:
 
 ## Screenshots
 
-Add project screenshots under `assets/screenshots/` and update these references as needed.
+### Workspace overview
+The main research workspace for a run, showing the question, run status, key pipeline metrics, and the grounded brief generated from ranked evidence and extracted claims.
 
-- Workspace view: `assets/screenshots/run-workspace.png`
-- Claim review: `assets/screenshots/claim-review.png`
-- Evidence brief: `assets/screenshots/brief-section.png`
+![OpenBioSignal workspace overview](assets/workspace-overview.png)
+
+### Claim review
+Structured claim cards with stance labels, evidence spans, rationale, and quality-review context for inspecting what the pipeline extracted from top-ranked chunks.
+
+![OpenBioSignal claim review](assets/claim-review.png)
+
+### Evidence view
+Compact evidence cards showing the claims and supporting evidence spans that feed the generated brief.
+
+![OpenBioSignal evidence view](assets/evidence-cards.png)
+
+### Research intake
+The local-first entry point for creating a new research run from a biomedical question.
+
+![OpenBioSignal research intake](assets/home-intake.png)
 
 ## Quickstart
 
@@ -135,13 +155,13 @@ Current strengths:
 - the UI is usable for inspecting search, ranking, claims, evaluations, and briefs
 - claim extraction and ranking are now more evidence-aware than the initial scaffold
 
-Current limitations:
+## Current limitations
 
-- retrieval is still lexical and heuristic, not embedding-based
-- claim extraction is single-claim-per-chunk and still imperfect
-- claim evaluations are model-based heuristics, not gold-standard benchmarks
-- PubMed coverage is abstract-first; full-text workflows are not implemented
-- no authentication, multi-user support, or deployment story is included
+- Abstract-first pipeline for now; full-text support is limited
+- Retrieval is currently lexical/heuristic rather than embedding-based
+- Claim extraction and evaluation are still being iterated
+- Automated evaluation is useful for debugging, not ground truth
+- This is a research prototype, not a clinical or diagnostic tool
 
 ## Roadmap
 
